@@ -1,0 +1,71 @@
+.title{
+    background-color: #00adb5; 
+    border-radius: 8px; 
+    padding: 1px; 
+    margin-top: 5px;
+}
+
+.nav-item{
+    color: #393e46;
+}
+
+.link{
+    color:#eeee;
+}
+
+.klasemen-button{
+    background-color: #393e46; 
+    border: none; 
+    outline: none; 
+    border-radius: 8px; 
+    padding: 7px;
+}
+
+
+
+.standing-header{
+    color: #222831;
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+}
+
+.club-name-table{
+    color: #00adb5
+}
+
+.club-standing-logo{
+    margin-left: 10px;
+}
+
+.klasemen-title{
+    margin-top: 40px;
+}
+
+.schedule{
+    padding: 5px;
+    background-color: #00adb5;
+    color: white;
+}
+
+#btn-save-favorite{
+    border: unset;
+    outline: unset;
+    border-radius: 8px;
+    background-color: #00adb5;
+    color: white;
+}
+
+#btn-schedules, #btn-club-information{
+    border: unset;
+    outline: unset;
+    border-radius: 8px;
+    background-color: #393e46;
+    color: white;
+}
+
+#btn-save-favorite:hover, #btn-schedules:hover, #btn-club-information:hover{
+    cursor: pointer;
+}
+
+

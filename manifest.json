@@ -1,0 +1,9 @@
+{
+    "name": "Top Eruo Football",
+    "short_name": "Top Eruo Football",
+    "description": "Top Eruo Football",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff"
+}
