@@ -18,16 +18,16 @@ const getCompetitionStanding = () => {
 
         // Cek apakah data klasemen ada di indexedDB
         const checkDB = id => {
-            return new Promise(function(resolve, reject) {
+            return new Promise(() => {
               dbPromised
-                .then(function(db) {
-                  var tx = db.transaction("standings", "readonly");
-                  var store = tx.objectStore("standings");
+                .then(db => {
+                  let tx = db.transaction("standings", "readonly");
+                  let store = tx.objectStore("standings");
                   return store.get(id);
                 })
-                .then(function(schedule) {
+                .then(schedule => {
                   if(schedule){
-                      return
+                      return;
                   }else{
                     // Simpan data jika belum ada data klasemen di indexDB
                     saveCompetitionStanding(data);
@@ -99,7 +99,6 @@ const getClubMatch = () => {
     let urlParams = new URLSearchParams(window.location.search);
     let idParam = urlParams.get("id");
     let logoParam = urlParams.get("logo");
-
     
     fetch(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`, {
         headers: {
@@ -111,14 +110,14 @@ const getClubMatch = () => {
         data.id = idParam;
         // Cek apakah data jadwal ada di indexedDB
         const checkDB = id => {
-            return new Promise(function(resolve, reject) {
+            return new Promise(() =>{
               dbPromised
-                .then(function(db) {
-                  var tx = db.transaction("schedules", "readonly");
-                  var store = tx.objectStore("schedules");
+                .then(db => {
+                  let tx = db.transaction("schedules", "readonly");
+                  let store = tx.objectStore("schedules");
                   return store.get(id);
                 })
-                .then(function(schedule) {
+                .then(schedule => {
                   if(schedule){
                       return
                   }else{
@@ -142,6 +141,7 @@ const getClubMatch = () => {
                     <button id="btn-club-information">Club Information</button>
                 </a>
             </center>
+            <h5>Match Schedules</h5>
             ${
                 schedules.map(schedule => {
                     let date = new Date(schedule.utcDate)
@@ -149,17 +149,15 @@ const getClubMatch = () => {
                         
                         <div class="card schedule">
                             <div class="row">
-                                <div class="col s12" style="color: #393e46">
-                                    ${date.toLocaleString("id-ID")}
-                                </div>
                                 <div class="col s12">
                                     <center>
+                                        <h6 style="color: #393e46">${schedule.competition.name}</h6>
                                     <tr>
                                         <td><h5>${schedule.homeTeam.name} <span style="font-size: 10pt">(Home)</span></h5></td>
                                         <td><h5>vs</h5></td>
                                         <td><h5>${schedule.awayTeam.name} <span style="font-size: 10pt">(Away)</span></h5></td>
                                     </tr>
-                                        <h6 style="color: #393e46">${schedule.competition.name}</h6>
+                                        <span style="color: #393e46">${date.toLocaleString("id-ID")}</span> 
                                     </center>
                                 </div>
                             </div>
@@ -187,14 +185,14 @@ const getClubInformation = () => {
 
         // Cek apakah data tim ada di indexedDB
         const checkDB = id => {
-            return new Promise(function(resolve, reject) {
+            return new Promise(() => {
               dbPromised
-                .then(function(db) {
-                  var tx = db.transaction("clubs", "readonly");
-                  var store = tx.objectStore("clubs");
+                .then(db => {
+                  let tx = db.transaction("clubs", "readonly");
+                  let store = tx.objectStore("clubs");
                   return store.get(id);
                 })
-                .then(function(schedule) {
+                .then(schedule => {
                   if(schedule){
                       return
                   }else{

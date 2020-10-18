@@ -1,38 +1,29 @@
-const CACHE_NAME = "d-clothes-v1";
+const CACHE_NAME = "top-euro-league-v1";
 var urlsToCache = [
   "/",
-  "manifest.json",
-  "/icon-128x128.png",
-  "/icon-144x144.png",
-  "/icon-192x192.png",
-  "/icon-256x256.png",
-  "/icon-384x384.png",
-  "/icon-512x512.png",
   "/nav.html",
+  "/index.js",
+  "/match.html",
+  "/club_information.html",
+  "/standings.html",
   "/index.html",
   "/pages/home.html",
-  "/pages/about.html",
-  "/pages/partner.html",
-  "/pages/contact.html",
   "/css/materialize.min.css",
   "/css/style.css",
+  "/images/bundesliga.svg",
+  "/images/eredivisie.jpg",
+  "/images/la_liga.png",
+  "/images/ligue_1.svg",
+  "/images/premiere_league_emblem.jpg",
+  "/images/serie_a.jpg",
   "/js/materialize.min.js",
-  "/js/script.js",
-  "images/jas.jpg",
-  "images/audina.jpg",
-  "images/baju.jpg",
-  "images/celana.jpeg",
-  "images/eiger.jpg",
-  "images/gucci.jpg",
-  "images/header.jpeg",
-  "images/me.jpg",
-  "images/logo.png",
-  "images/1.jpg",
-  "images/2.jpg",
-  "images/3.jpg",
-  "images/4.jpeg",
+  "/manifest.json",
+  "/js/db.js",
+  "/js/idb.js",
+  "/js/main.js",
+  "/js/api.js",
 ];
- 
+
 self.addEventListener("install", function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
@@ -42,29 +33,37 @@ self.addEventListener("install", function(event) {
 });
 
 self.addEventListener("fetch", function(event) {
+  let base_url = "https://api.football-data.org/";
+
+  if (event.request.url.indexOf(base_url) > -1) {
     event.respondWith(
-      caches
-        .match(event.request, { cacheName: CACHE_NAME })
-        .then(function(response) {
-          if (response) {
-            return response;
-          }
-          return fetch(event.request);
+      caches.open(CACHE_NAME).then(function(cache) {
+        return fetch(event.request).then(function(response) {
+          cache.put(event.request.url, response.clone());
+          return response;
         })
-    );
-  });
-
-
-  self.addEventListener("activate", function(event) {
-    event.waitUntil(
-      caches.keys().then(function(cacheNames) {
-        return Promise.all(
-          cacheNames.map(function(cacheName) {
-            if (cacheName != CACHE_NAME) {
-              return caches.delete(cacheName);
-            }
-          })
-        );
       })
     );
-  });
+  } else {
+    event.respondWith(
+      caches.match(event.request, { ignoreSearch: true }).then(function(response) {
+        return response || fetch (event.request);
+      })
+    )
+  }
+});
+
+self.addEventListener("activate", function(event) {
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          if (cacheName != CACHE_NAME) {
+            console.log("ServiceWorker: cache " + cacheName + " dihapus");
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});

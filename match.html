@@ -64,13 +64,13 @@
   <script type="module" src="index.js"></script>
   
   <script>
-    // //REGISTER SERVICE WORKER
-    // if ("serviceWorker" in navigator) {
-    //   window.addEventListener("load", function() {
-    //     navigator.serviceWorker
-    //       .register("/service-worker.js")
-    //   });
-    // }
+    //REGISTER SERVICE WORKER
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+      });
+    }
   </script>
 </body>
 </html>
