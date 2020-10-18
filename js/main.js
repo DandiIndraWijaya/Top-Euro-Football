@@ -27,7 +27,9 @@ const main = () => {
 							M.Sidenav.getInstance(sidenav).close();
 							
 							// Muat konten halaman yang dipanggil 
-							page = event.target.getAttribute('href').substr(1);
+							let url = event.target.getAttribute('href').substr(1);
+							url = url.split("#")
+							const page = url[1]
 							loadPage(page);
 						});
 					});
@@ -57,9 +59,7 @@ const main = () => {
 		function loadPage(page)
 		{
 			const content = document.querySelector(".body-content");
-			if(page === 'klasemen'){
-				console.log('klasemen')
-			}else{
+			
 				fetch('../pages/'+page+'.html')
 				.then(response => {
 					if(response.status === 200){
@@ -70,16 +70,12 @@ const main = () => {
 						}
 					}
 					else if(response.status === 404){
-						content.innerHTML = "<p>Halaman tidak ditemukan.</p>";
+						content.innerHTML = "<p>Page not Found.</p>";
 					}else{
-						content.innerHTML = "<p>Halaman tidak dapat diakses.</p>";
+						content.innerHTML = "<p>Can't Access this Page.</p>";
 					}
 				});
-			}
 		}
-
-
-		// INDEXEDDB
 		
 	});
 }
