@@ -1,5 +1,3 @@
-
-
 let base_url = "https://api.football-data.org/v2/";
 
 // Blok kode yang akan di panggil jika fetch berhasil
@@ -38,7 +36,7 @@ const getCompetitionStanding = () => {
             
             content.innerHTML = `
                 <center><img src="${logo}" widt="100" height="100" class="club-standing-logo" /></center>
-                <h5>Klasemen</h5>
+                <h5>Standing <span style="font-size: 10pt;">${data.status}</span> </h5> 
             <table class="striped">
             <thead>
             <tr>
@@ -92,6 +90,7 @@ const getCompetitionStanding = () => {
           caches.match(`${base_url}competitions/${idParam}/standings`).then(function(response) {
             if (response) {
               response.json().then(function(data) {
+                data.status = "The data isn't Updated because you're offline"
                 showData(data, idParam)
                 // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
                 resolve(data);
@@ -107,6 +106,7 @@ const getCompetitionStanding = () => {
           .then(status)
           .then(json)
           .then(function(data) {
+            data.status = "The data is up to date"
             showData(data, idParam);
             // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
             resolve(data);
@@ -153,7 +153,7 @@ const getClubMatch = () => {
                 ).join(" ")
             }`;
     }
-    
+    console.log('dd')
     return new Promise(function(resolve, reject) {
         // Ambil nilai query parameter (?id=)
         let urlParams = new URLSearchParams(window.location.search);

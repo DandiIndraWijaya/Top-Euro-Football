@@ -3,29 +3,11 @@
 let dbPromised = idb.openDB("top-euro-football", 1, {
     upgrade(db){
 
-        let clubsObjectStore = db.createObjectStore("clubs", {
-            keyPath: "id"
-        });
-    
-        clubsObjectStore.createIndex("name", "name", { unique: true })
-
         let favoritesObjectStore = db.createObjectStore("favorite-clubs", {
             keyPath: "id"
         });
     
         favoritesObjectStore.createIndex("name", "name", { unique: true })
-
-        let standingsObjectStore = db.createObjectStore("standings", {
-            keyPath: "id"
-        });
-    
-        standingsObjectStore.createIndex("id", "id", { unique: true })
-
-        let schedulesObjectStore = db.createObjectStore("schedules", {
-            keyPath: "id"
-        });
-    
-        schedulesObjectStore.createIndex("id", "id", { unique: true })
     }
     
 });
