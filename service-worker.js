@@ -35,9 +35,9 @@ self.addEventListener("install", function(event) {
 
 
 self.addEventListener("fetch", function(event) {
-  let base_url = "https://api.football-data.org/";
+  let base_url = "https://api.football-data.org/v2/";
 
-  if (navigator.onLine) {
+  if (event.request.url.indexOf(base_url) > -1) {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return fetch(event.request).then(function(response) {
@@ -49,10 +49,11 @@ self.addEventListener("fetch", function(event) {
     );
   } else {
     event.respondWith(
-      fetch(event.request).catch(function() {
-        return caches.match(event.request);
+      caches.match(event.request, { ignoreSearch: true }).then(function(response) {
+        return response || fetch (event.request);
       })
-    );}
+    )
+  }
 });
 
 self.addEventListener("activate", function(event) {

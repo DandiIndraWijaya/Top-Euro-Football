@@ -1,143 +1,129 @@
 import { dbPromised, saveClubs, saveToFavorites, saveCompetitionStanding, saveSchedules } from './db.js';
 
+let base_url = "https://api.football-data.org/v2/";
+
+// Blok kode yang akan di panggil jika fetch berhasil
+const status = response => {
+    if (response.status !== 200) {
+      console.log("Error : " + response.status);
+      // Method reject() akan membuat blok catch terpanggil
+      return Promise.reject(new Error(response.statusText));
+    } else {
+      // Mengubah suatu objek menjadi Promise agar bisa "di-then-kan"
+      return Promise.resolve(response);
+    }
+  }
+  
+  // Blok kode untuk memparsing json menjadi array JavaScript
+  const json = response => {
+    return response.json();
+  }
+  
+  // Blok kode untuk meng-handle kesalahan di blok catch
+  const error = () => {
+    // Parameter error berasal dari Promise.reject()
+    console.log("Error : " + error);
+  }
 
 const getCompetitionStanding = () => {
-    let urlParams = new URLSearchParams(window.location.search);
-    let idParam = urlParams.get("id");
-    
-    fetch(`https://api.football-data.org/v2/competitions/${idParam}/standings`, {
-        headers: {
-            "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+    let showData = (data, id) => {
         const content = document.querySelector(".body-content");
-        const standings = data.standings[0].table;
-        data.id = idParam;
+            const standings = data.standings[0].table;
+            data.id = id;
 
-        // Cek apakah data klasemen ada di indexedDB
-        const checkDB = id => {
-            return new Promise(() => {
-              dbPromised
-                .then(db => {
-                  let tx = db.transaction("standings", "readonly");
-                  let store = tx.objectStore("standings");
-                  return store.get(id);
-                })
-                .then(schedule => {
-                  if(schedule){
-                      return;
-                  }else{
-                    // Simpan data jika belum ada data klasemen di indexDB
-                    saveCompetitionStanding(data);
-                  }
-                });
-            });
-          }
-
-        checkDB(idParam)
-
-        let logo = '';
-        if(idParam === '2021'){
-            logo = '../images/premiere_league_emblem.jpg';
-        }
-        
-        content.innerHTML = `
-        <div class="standing-header">
-            
-            <div><h5 class="klasemen-title">Klasemen</h5></div>
-            <div><img src="${logo}" widt="100" height="100" class="club-standing-logo" /></div>
-        </div>
-        <table class="striped">
-        <thead>
-          <tr>
-            <th></th>
-            <th></th>
-              <th>Klub</th>
-              <th>M</th>
-              <th>M</th>
-              <th>S</th>
-              <th>K</th>
-              <th>GM</th>
-              <th>GA</th>
-              <th>SG</th>
-              <th>Poin</th>
-          </tr>
-        </thead>
-
-        <tbody>
-            ${
-                standings.map(club => `
-                        <tr>
-                            <td>${club.position}</td>
-                            <td><img src="${club.team.crestUrl}"  height="15"  /></td>
-                            <td> 
-                                <a href="./club_information.html?id=${club.team.id}" >
-                                     <span class="club-name-table">${club.team.name}</span>
-                                </a>
-                            </td>
-                            <td>${club.playedGames}</td>
-                            <td>${club.won}</td>
-                            <td>${club.draw}</td>
-                            <td>${club.lost}</td>
-                            <td>${club.goalsFor}</td>
-                            <td>${club.goalsAgainst}</td>
-                            <td>${club.goalDifference}</td>
-                            <td>${club.points}</td>
-                        </tr>
-                    `
-                ).join(" ")
+            let logo = '';
+            if(id === '2021'){
+                logo = '../images/premiere_league_emblem.jpg';
             }
-        </tbody>
-      </table>
-        `
-    })
+            
+            content.innerHTML = `
+                <center><img src="${logo}" widt="100" height="100" class="club-standing-logo" /></center>
+                <h5>Klasemen</h5>
+            <table class="striped">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Klub</th>
+                <th>M</th>
+                <th>M</th>
+                <th>S</th>
+                <th>K</th>
+                <th>GM</th>
+                <th>GA</th>
+                <th>SG</th>
+                <th>Poin</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                ${
+                    standings.map(club => `
+                            <tr>
+                                <td>${club.position}</td>
+                                <td><img src="${club.team.crestUrl}"  height="15"  /></td>
+                                <td> 
+                                    <a href="./club_information.html?id=${club.team.id}" >
+                                        <span class="club-name-table">${club.team.name}</span>
+                                    </a>
+                                </td>
+                                <td>${club.playedGames}</td>
+                                <td>${club.won}</td>
+                                <td>${club.draw}</td>
+                                <td>${club.lost}</td>
+                                <td>${club.goalsFor}</td>
+                                <td>${club.goalsAgainst}</td>
+                                <td>${club.goalDifference}</td>
+                                <td>${club.points}</td>
+                            </tr>
+                        `
+                    ).join(" ")
+                }
+            </tbody>
+        </table>
+            `
+    }
+    return new Promise(function(resolve, reject) {
+        // Ambil nilai query parameter (?id=)
+        var urlParams = new URLSearchParams(window.location.search);
+        var idParam = urlParams.get("id");
+
+        if ("caches" in window) {
+          caches.match(`${base_url}competitions/${idParam}/standings`).then(function(response) {
+            if (response) {
+              response.json().then(function(data) {
+                showData(data, idParam)
+                // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
+                resolve(data);
+              });
+            }
+          });
+        }
+        fetch(`${base_url}competitions/${idParam}/standings`, {
+            headers: {
+                "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
+            }
+        })
+          .then(status)
+          .then(json)
+          .then(function(data) {
+            showData(data, idParam);
+            // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
+            resolve(data);
+          });
+      });
 }
 
 const getClubMatch = () => {
-    let urlParams = new URLSearchParams(window.location.search);
-    let idParam = urlParams.get("id");
-    let logoParam = urlParams.get("logo");
-    
-    fetch(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`, {
-        headers: {
-            "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        data.id = idParam;
-        // Cek apakah data jadwal ada di indexedDB
-        const checkDB = id => {
-            return new Promise(() =>{
-              dbPromised
-                .then(db => {
-                  let tx = db.transaction("schedules", "readonly");
-                  let store = tx.objectStore("schedules");
-                  return store.get(id);
-                })
-                .then(schedule => {
-                  if(schedule){
-                      return
-                  }else{
-                    // Simpan data jika belum ada jadwal di indexDB
-                    saveSchedules(data)
-                  }
-                });
-            });
-          }
-
-        checkDB(idParam)
-        
+    let showData = (data, logo, id) =>{
         const content = document.querySelector(".body-content");
         const schedules = data.matches;
         content.innerHTML = `
             <br>
             <center>
-                <img src="${logoParam}" width="100" height="100" />
+                <img src="${logo}" width="100" height="100" />
                 <br>
-                <a href="./club_information.html?id=${idParam}">
+                <a href="./club_information.html?id=${id}">
                     <button id="btn-club-information">Club Information</button>
                 </a>
             </center>
@@ -166,45 +152,44 @@ const getClubMatch = () => {
                     }
                 ).join(" ")
             }`;
-    })
+    }
+    
+    return new Promise(function(resolve, reject) {
+        // Ambil nilai query parameter (?id=)
+        let urlParams = new URLSearchParams(window.location.search);
+        let idParam = urlParams.get("id");
+        let logoParam = urlParams.get("logo");
+
+        if ("caches" in window) {
+          caches.match(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`).then(function(response) {
+            if (response) {
+              response.json().then(function(data) {
+                showData(data, logoParam ,idParam)
+                // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
+                resolve(data);
+              });
+            }
+          });
+        }
+
+        fetch(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`, {
+            headers: {
+                "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
+            }
+        })
+          .then(status)
+          .then(json)
+          .then(function(data) {
+            showData(data, logoParam ,idParam)
+            // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
+            resolve(data);
+          });
+      });
 }
 
 const getClubInformation = () => {
-    let urlParams = new URLSearchParams(window.location.search);
-    let idParam = urlParams.get("id");
-
-    fetch(`https://api.football-data.org/v2/teams/${idParam}`, {
-        headers: {
-            "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const content = document.querySelector(".body-content");
-        data.id = idParam
-
-        // Cek apakah data tim ada di indexedDB
-        const checkDB = id => {
-            return new Promise(() => {
-              dbPromised
-                .then(db => {
-                  let tx = db.transaction("clubs", "readonly");
-                  let store = tx.objectStore("clubs");
-                  return store.get(id);
-                })
-                .then(schedule => {
-                  if(schedule){
-                      return
-                  }else{
-                    // Simpan data jika belum ada data tim di indexDB
-                    saveClubs(data)
-                  }
-                });
-            });
-          }
-
-        checkDB(idParam)
-        
+    let showData = (data, id) => {
+        let content = document.querySelector('.body-content')
         content.innerHTML = `
             <br>
             <div class="card" style="padding: 5px;">
@@ -215,7 +200,7 @@ const getClubInformation = () => {
 
                     <button id="btn-save-favorite">Save to My Favorite</button>
                     <br>
-                        <a href="./match.html?id=${idParam}&logo=${data.crestUrl}"> 
+                        <a href="./match.html?id=${id}&logo=${data.crestUrl}"> 
                             <button id="btn-schedules">Match Schedules</button>
                         </a>
                     <br>
@@ -268,11 +253,38 @@ const getClubInformation = () => {
 		btnFavorite.addEventListener('click', () =>{
             saveToFavorites(data)
         });
-        
-        btnSchedules.addEventListener('click', () => {
+    }
+    return new Promise(function(resolve, reject) {
+        // Ambil nilai query parameter (?id=)
+        let urlParams = new URLSearchParams(window.location.search);
+        let idParam = urlParams.get("id");
 
+        if ("caches" in window) {
+          caches.match(`${base_url}teams/${idParam}`).then(function(response) {
+            if (response) {
+              response.json().then(function(data) {
+                showData(data, idParam)
+                // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
+                resolve(data, idParam);
+              });
+            }
+          });
+        }
+
+        fetch(`${base_url}teams/${idParam}`, {
+            headers: {
+                "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
+            }
         })
-    })
+          .then(status)
+          .then(json)
+          .then(function(data) {
+            showData(data, idParam)
+            // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
+            resolve(data);
+          });
+      });
+
 }
 
 export {
