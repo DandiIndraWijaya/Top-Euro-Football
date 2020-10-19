@@ -7,39 +7,15 @@ let dbPromised = idb.openDB("top-euro-football", 1, {
             keyPath: "id"
         });
     
-        favoritesObjectStore.createIndex("name", "name", { unique: true })
+        favoritesObjectStore.createIndex("name", "name", { unique: false })
     }
     
 });
 
-const saveClubs = (data) => {
-    dbPromised.then(db => {
-        let tx = db.transaction("clubs", "readwrite");
-        let store = tx.objectStore("clubs");
-        store.add(data);
-    })
-}
-
-const saveToFavorites = (data) => {
+const saveToFavoriteClubs = (data) => {
     dbPromised.then(db => {
         let tx = db.transaction("favorite-clubs", "readwrite");
         let store = tx.objectStore("favorite-clubs");
-        store.add(data);
-    })
-}
-
-const saveCompetitionStanding = (data) => {
-    dbPromised.then(db => {
-        let tx = db.transaction("standings", "readwrite");
-        let store = tx.objectStore("standings");
-        store.add(data);
-    })
-} 
-
-const saveSchedules = (data) => {
-    dbPromised.then(db => {
-        let tx = db.transaction("schedules", "readwrite");
-        let store = tx.objectStore("schedules");
         store.add(data);
     })
 }
@@ -58,7 +34,22 @@ const getAll = () => {
     })
 }
 
-function getById(id) {
+const checkFavoriteClub = id => {
+    return new Promise((resolve, reject) => {
+        dbPromised
+            .then(db => {
+                let tx = db.transaction("favorite-clubs", "readonly");
+                let store = tx.objectStore("favorite-clubs");
+            
+                return store.get(id);
+            })
+            .then(data => {
+                resolve(data)
+            })
+    })
+}
+
+const getClubById = id => {
     return new Promise(function(resolve, reject) {
       dbPromised
         .then(function(db) {
@@ -68,7 +59,7 @@ function getById(id) {
         })
         .then(function(article) {
           resolve(article);
-        });
+        })
     });
   }
 

@@ -54,6 +54,7 @@
     border-radius: 8px;
     background-color: #00adb5;
     color: white;
+    padding: 5px;
 }
 
 #btn-schedules, #btn-club-information{
@@ -62,6 +63,8 @@
     border-radius: 8px;
     background-color: #393e46;
     color: white;
+    padding: 5px;
+    margin-top: 5px;
 }
 
 #btn-save-favorite:hover, #btn-schedules:hover, #btn-club-information:hover{

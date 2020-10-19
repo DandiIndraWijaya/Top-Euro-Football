@@ -1,4 +1,5 @@
 let base_url = "https://api.football-data.org/v2/";
+const content = document.querySelector(".body-content");
 
 // Blok kode yang akan di panggil jika fetch berhasil
 const status = response => {
@@ -24,7 +25,10 @@ const status = response => {
   }
 
 const getCompetitionStanding = () => {
-    const content = document.querySelector(".body-content");
+    // Ambil nilai query parameter (?id=)
+    var urlParams = new URLSearchParams(window.location.search);
+    var idParam = urlParams.get("id");
+    
     let showData = (data, id) => {
         
             const standings = data.standings[0].table;
@@ -83,9 +87,6 @@ const getCompetitionStanding = () => {
             `
     }
     return new Promise(function(resolve, reject) {
-        // Ambil nilai query parameter (?id=)
-        var urlParams = new URLSearchParams(window.location.search);
-        var idParam = urlParams.get("id");
 
         if(navigator.onLine){
             fetch(`${base_url}competitions/${idParam}/standings`, {
@@ -126,7 +127,11 @@ const getCompetitionStanding = () => {
 }
 
 const getClubMatch = () => {
-    const content = document.querySelector(".body-content");
+    // Ambil nilai query parameter (?id=)
+    let urlParams = new URLSearchParams(window.location.search);
+    let idParam = urlParams.get("id");
+    let logoParam = urlParams.get("logo");
+
     let showData = (data, logo, id) =>{
         
         const schedules = data.matches;
@@ -167,10 +172,6 @@ const getClubMatch = () => {
     }
     console.log('dd')
     return new Promise(function(resolve, reject) {
-        // Ambil nilai query parameter (?id=)
-        let urlParams = new URLSearchParams(window.location.search);
-        let idParam = urlParams.get("id");
-        let logoParam = urlParams.get("logo");
 
         if(navigator.onLine){
             fetch(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`, {
@@ -207,9 +208,11 @@ const getClubMatch = () => {
 }
 
 const getClubInformation = () => {
-    let content = document.querySelector('.body-content')
-    let showData = (data, id) => {
-        
+    // Ambil nilai query parameter (?id=)
+    let urlParams = new URLSearchParams(window.location.search);
+    let idParam = urlParams.get("id");
+
+    let showData = (data, id, check) => {
         content.innerHTML = `
             <br>
             <div class="card" style="padding: 5px;">
@@ -217,8 +220,7 @@ const getClubInformation = () => {
                 <center>
                     <h5 style="text-decoration: underline">${data.name}</h5>
                     <h6>Since ${data.founded}</h6>
-
-                    <button id="btn-save-favorite">Save to My Favorite</button>
+                    ${check ? "<span style='color: #00adb5'>I'm a fan of this club</span>" : '<button id="btn-save-favorite">Add to My Favorite Clubs</button>'}
                     <br>
                         <a href="./match.html?id=${id}&logo=${data.crestUrl}"> 
                             <button id="btn-schedules">Match Schedules</button>
@@ -266,19 +268,18 @@ const getClubInformation = () => {
             </div>
         `;
 
-        // SAVE CLUB TO MY FAVORITES
+        //  Simpan ke Favorite Clubs
         const btnFavorite = document.querySelector("#btn-save-favorite");
-        const btnSchedules = document.querySelector('#btn-schedules');
         
-		btnFavorite.addEventListener('click', () =>{
-            saveToFavorites(data)
-        });
+        if(btnFavorite){
+            btnFavorite.addEventListener('click', () =>{
+                showData(data, id, true);
+                saveToFavoriteClubs(data)
+            });
+        }
     }
     return new Promise(function(resolve, reject) {
-        // Ambil nilai query parameter (?id=)
-        let urlParams = new URLSearchParams(window.location.search);
-        let idParam = urlParams.get("id");
-
+        
         if(navigator.onLine){
             fetch(`${base_url}teams/${idParam}`, {
                 headers: {
@@ -288,7 +289,15 @@ const getClubInformation = () => {
               .then(status)
               .then(json)
               .then(function(data) {
-                showData(data, idParam)
+
+                checkFavoriteClub(parseInt(idParam)).then(club => {
+                    if(club){
+                        showData(data, idParam, true)
+                    }else{
+                        const check = false;
+                        showData(data, idParam, false)
+                    }
+                });
                 // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
                 resolve(data);
             });
@@ -296,9 +305,15 @@ const getClubInformation = () => {
             caches.match(`${base_url}teams/${idParam}`).then(function(response) {
                 if (response) {
                   response.json().then(function(data) {
-                    showData(data, idParam)
+                    checkFavoriteClub(parseInt(idParam)).then(club => {
+                        if(club){
+                            showData(data, idParam, true)
+                        }else{
+                            showData(data, idParam, false)
+                        }
+                    });
                     // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-                    resolve(data, idParam);
+                    resolve(data);
                   });
                 }else{
                     content.innerHTML = `
