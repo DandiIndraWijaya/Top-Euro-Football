@@ -24,8 +24,9 @@ const status = response => {
   }
 
 const getCompetitionStanding = () => {
+    const content = document.querySelector(".body-content");
     let showData = (data, id) => {
-        const content = document.querySelector(".body-content");
+        
             const standings = data.standings[0].table;
             data.id = id;
 
@@ -86,8 +87,24 @@ const getCompetitionStanding = () => {
         var urlParams = new URLSearchParams(window.location.search);
         var idParam = urlParams.get("id");
 
-        if ("caches" in window) {
-          caches.match(`${base_url}competitions/${idParam}/standings`).then(function(response) {
+        if(navigator.onLine){
+            fetch(`${base_url}competitions/${idParam}/standings`, {
+                headers: {
+                    "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
+                }
+            })
+              .then(status)
+              .then(json)
+              .then(function(data) {
+                data.status = "The data is up to date"
+                showData(data, idParam);
+                // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
+                resolve(data);
+              });
+        }
+        else {
+          caches.match(`${base_url}competitions/${idParam}/standings`)
+          .then(response => {
             if (response) {
               response.json().then(function(data) {
                 data.status = "The data isn't Updated because you're offline"
@@ -95,28 +112,23 @@ const getCompetitionStanding = () => {
                 // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
                 resolve(data);
               });
+            }else{
+                content.innerHTML = `
+                <center>
+                    <h3 style="margin-top: 20%">No Data & You're Offline</h3>
+                    <h5>Connect your device to internet to receive data</h5>
+                </center>`
             }
           });
         }
-        fetch(`${base_url}competitions/${idParam}/standings`, {
-            headers: {
-                "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
-            }
-        })
-          .then(status)
-          .then(json)
-          .then(function(data) {
-            data.status = "The data is up to date"
-            showData(data, idParam);
-            // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-            resolve(data);
-          });
-      });
+       
+    });
 }
 
 const getClubMatch = () => {
+    const content = document.querySelector(".body-content");
     let showData = (data, logo, id) =>{
-        const content = document.querySelector(".body-content");
+        
         const schedules = data.matches;
         content.innerHTML = `
             <br>
@@ -160,36 +172,44 @@ const getClubMatch = () => {
         let idParam = urlParams.get("id");
         let logoParam = urlParams.get("logo");
 
-        if ("caches" in window) {
-          caches.match(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`).then(function(response) {
-            if (response) {
-              response.json().then(function(data) {
+        if(navigator.onLine){
+            fetch(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`, {
+                headers: {
+                    "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
+                }
+            })
+            .then(status)
+            .then(json)
+            .then(function(data) {
                 showData(data, logoParam ,idParam)
                 // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
                 resolve(data);
-              });
-            }
-          });
+            });
+        }else{
+            caches.match(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`)
+            .then(response => {
+                if (response) {
+                    response.json().then(function(data) {
+                        showData(data, logoParam ,idParam)
+                        // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
+                        resolve(data);
+                    });
+                }else{
+                    content.innerHTML = `
+                    <center>
+                        <h3 style="margin-top: 20%">No Data & You're Offline</h3>
+                        <h5>Connect your device to internet to receive data</h5>
+                    </center>`
+                }
+            });
         }
-
-        fetch(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`, {
-            headers: {
-                "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
-            }
-        })
-          .then(status)
-          .then(json)
-          .then(function(data) {
-            showData(data, logoParam ,idParam)
-            // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-            resolve(data);
-          });
-      });
+    });
 }
 
 const getClubInformation = () => {
+    let content = document.querySelector('.body-content')
     let showData = (data, id) => {
-        let content = document.querySelector('.body-content')
+        
         content.innerHTML = `
             <br>
             <div class="card" style="padding: 5px;">
@@ -259,31 +279,36 @@ const getClubInformation = () => {
         let urlParams = new URLSearchParams(window.location.search);
         let idParam = urlParams.get("id");
 
-        if ("caches" in window) {
-          caches.match(`${base_url}teams/${idParam}`).then(function(response) {
-            if (response) {
-              response.json().then(function(data) {
+        if(navigator.onLine){
+            fetch(`${base_url}teams/${idParam}`, {
+                headers: {
+                    "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
+                }
+            })
+              .then(status)
+              .then(json)
+              .then(function(data) {
                 showData(data, idParam)
                 // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-                resolve(data, idParam);
+                resolve(data);
+            });
+        }else{
+            caches.match(`${base_url}teams/${idParam}`).then(function(response) {
+                if (response) {
+                  response.json().then(function(data) {
+                    showData(data, idParam)
+                    // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
+                    resolve(data, idParam);
+                  });
+                }else{
+                    content.innerHTML = `
+                    <center>
+                        <h3 style="margin-top: 20%">No Data & You're Offline</h3>
+                        <h5>Connect your device to internet to receive data</h5>
+                    </center>`
+                }
               });
-            }
-          });
         }
-
-        fetch(`${base_url}teams/${idParam}`, {
-            headers: {
-                "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
-            }
-        })
-          .then(status)
-          .then(json)
-          .then(function(data) {
-            showData(data, idParam)
-            // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-            resolve(data);
-          });
-      });
-
+    });
 }
 
