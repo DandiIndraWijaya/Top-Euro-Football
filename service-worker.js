@@ -1,5 +1,5 @@
-const CACHE_NAME = "top-euro-league-v1";
-var urlsToCache = [
+let CACHE_NAME = "top-euro-league-v1";
+let urlsToCache = [
   "/",
   "/nav.html",
   "/index.js",
@@ -32,25 +32,27 @@ self.addEventListener("install", function(event) {
   );
 });
 
+
+
 self.addEventListener("fetch", function(event) {
   let base_url = "https://api.football-data.org/";
 
-  if (event.request.url.indexOf(base_url) > -1) {
+  if (navigator.onLine) {
     event.respondWith(
       caches.open(CACHE_NAME).then(function(cache) {
         return fetch(event.request).then(function(response) {
           cache.put(event.request.url, response.clone());
+          console.log('gsgs')
           return response;
         })
       })
     );
   } else {
     event.respondWith(
-      caches.match(event.request, { ignoreSearch: true }).then(function(response) {
-        return response || fetch (event.request);
+      fetch(event.request).catch(function() {
+        return caches.match(event.request);
       })
-    )
-  }
+    );}
 });
 
 self.addEventListener("activate", function(event) {
