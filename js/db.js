@@ -1,4 +1,4 @@
-import idb from './idb.js'
+
 
 let dbPromised = idb.openDB("top-euro-football", 1, {
     upgrade(db){
@@ -91,10 +91,3 @@ function getById(id) {
   }
 
 
-export{
-    dbPromised,
-    saveToFavorites,
-    saveCompetitionStanding,
-    saveSchedules,
-    saveClubs
-}

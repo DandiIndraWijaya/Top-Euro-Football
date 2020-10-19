@@ -1,4 +1,4 @@
-import { dbPromised, saveClubs, saveToFavorites, saveCompetitionStanding, saveSchedules } from './db.js';
+
 
 let base_url = "https://api.football-data.org/v2/";
 
@@ -287,8 +287,3 @@ const getClubInformation = () => {
 
 }
 
-export {
-    getCompetitionStanding,
-    getClubMatch,
-    getClubInformation
-}

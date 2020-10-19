@@ -1,6 +1,4 @@
-import { getCompetitionStanding, getClubMatch, getClubInformation } from './api.js';
 
-const main = () => {
 	document.addEventListener('DOMContentLoaded', function(){
 
 		// SIDEBAR NAVIGATION
@@ -78,8 +76,7 @@ const main = () => {
 		}
 		
 	});
-}
 
 
-export default main;
+
 
