@@ -220,7 +220,12 @@ const getClubInformation = () => {
                 <center>
                     <h5 style="text-decoration: underline">${data.name}</h5>
                     <h6>Since ${data.founded}</h6>
-                    ${check ? "<span style='color: #00adb5'>I'm a fan of this club</span>" : '<button id="btn-save-favorite">Add to My Favorite Clubs</button>'}
+                    ${check ? 
+                        `<span style='color: #00adb5'>I'm a fan of this club</span>
+                        <br>
+                        <button id="btn-remove-favorite">Not a fan anymore? ( click! )</button>` : 
+                        `<button id="btn-save-favorite">Add to My Favorite Clubs</button>`
+                    }
                     <br>
                         <a href="./match.html?id=${id}&logo=${data.crestUrl}"> 
                             <button id="btn-schedules">Match Schedules</button>
@@ -268,15 +273,25 @@ const getClubInformation = () => {
             </div>
         `;
 
-        //  Simpan ke Favorite Clubs
-        const btnFavorite = document.querySelector("#btn-save-favorite");
         
+        const btnFavorite = document.querySelector("#btn-save-favorite");
+        const btnRemoveFavorite = document.querySelector("#btn-remove-favorite");
+        //  Simpan ke Favorite Clubs
         if(btnFavorite){
             btnFavorite.addEventListener('click', () =>{
                 showData(data, id, true);
                 saveToFavoriteClubs(data)
             });
         }
+
+        // Hapush dari Favorite Clubs
+        if(btnRemoveFavorite){
+            btnRemoveFavorite.addEventListener('click', () => {
+                showData(data, id, false);
+                removeFromFavoriteClubs(parseInt(id))
+            })
+        }
+
     }
     return new Promise(function(resolve, reject) {
         
@@ -290,11 +305,13 @@ const getClubInformation = () => {
               .then(json)
               .then(function(data) {
 
+                // Cek apakah club/tim adalah club favorit
                 checkFavoriteClub(parseInt(idParam)).then(club => {
                     if(club){
+                        // Jika iya
                         showData(data, idParam, true)
                     }else{
-                        const check = false;
+                        // Jika tidak
                         showData(data, idParam, false)
                     }
                 });
@@ -305,10 +322,13 @@ const getClubInformation = () => {
             caches.match(`${base_url}teams/${idParam}`).then(function(response) {
                 if (response) {
                   response.json().then(function(data) {
+                      // Cek apakah club/tim adalah club favorit
                     checkFavoriteClub(parseInt(idParam)).then(club => {
                         if(club){
+                            // Jika iya 
                             showData(data, idParam, true)
                         }else{
+                            // Jika tidak
                             showData(data, idParam, false)
                         }
                     });

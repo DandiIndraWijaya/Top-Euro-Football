@@ -57,6 +57,19 @@
     padding: 5px;
 }
 
+#btn-remove-favorite{
+    border: unset;
+    outline: unset;
+    background-color: inherit;
+    font-size: 8pt;
+    color: rgb(219, 20, 20);
+    padding: 5px;
+}
+
+#btn-remove-favorite:hover{
+    text-decoration: underline;
+}
+
 #btn-schedules, #btn-club-information{
     border: unset;
     outline: unset;

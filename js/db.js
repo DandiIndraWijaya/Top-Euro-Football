@@ -20,6 +20,14 @@ const saveToFavoriteClubs = (data) => {
     })
 }
 
+const removeFromFavoriteClubs = (data) => {
+    dbPromised.then(db => {
+        let tx = db.transaction("favorite-clubs", "readwrite");
+        let store = tx.objectStore("favorite-clubs");
+        store.delete(data);
+    })
+}
+
 const getAll = () => {
     return new Promise((resolve, reject) => {
         dbPromised
