@@ -1,3 +1,21 @@
+*{
+    font-family: "Lucida Console", Monaco, monospace;
+}
+
+nav{
+    background-color:#393e46;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
 .title{
     background-color: #00adb5; 
     border-radius: 8px; 
@@ -21,7 +39,11 @@
     padding: 7px;
 }
 
-
+.schedules{
+    background-color: #00adb5;
+    color: #eeee;
+    font-weight: bolder;
+}
 
 .standing-header{
     color: #222831;

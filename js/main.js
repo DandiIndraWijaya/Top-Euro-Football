@@ -1,8 +1,25 @@
 
 	document.addEventListener('DOMContentLoaded', function(){
+		// Muat NavBar
+		document.getElementById("nav").innerHTML = `
+			<div class="nav-wrapper container">
+			<a href="#" class="brand-logo" id="logo-container" style="color: #eeee;">Top Euro</a>
+			<a href="#" class="sidenav-trigger" data-target="nav-mobile" style="color: black;">&#9776;</a>
+	
+			<ul class="topnav right hide-on-med-and-down"></ul>
+			<ul class="sidenav" style="background-color: #393e46;" id="nav-mobile"></ul>
+		</div>
+		`
+
+		// Muat Footer
+		document.getElementById("footer").innerHTML = `
+			<div class="container" style="padding: 0px 10px 10px 10px;">
+				<center>© 2020 Copyright | Built by Dandi Indra Wijaya</center>
+			</div>
+		`
 
 		// SIDEBAR NAVIGATION
-		var elems = document.querySelectorAll('.sidenav');
+		let elems = document.querySelectorAll('.sidenav');
 		M.Sidenav.init(elems);
 		loadNav();
 		

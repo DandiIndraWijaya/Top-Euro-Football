@@ -2,69 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Top Eruo Football</title>
+  <title>Top Euro Football League</title>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#ffffff"/>
   <meta name="description" content="Top Eruo Football"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/materialize.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    *{
-      font-family: "Lucida Console", Monaco, monospace;
-    }
-
-    body {
-      display: flex;
-      min-height: 100vh;
-      flex-direction: column;
-    }
-
-    main {
-      flex: 1 0 auto;
-    }
-
-    nav{
-      background-color:#393e46;
-    }
-  </style>
 </head>
 <body>
 
   <!-- Navigasi -->
   <nav  role="navigation">
-    <div class="nav-wrapper container">
-      <a href="#" class="brand-logo" id="logo-container" style="color: #eeee;">Top Eruo Football</a>
-      <a href="#" class="sidenav-trigger" data-target="nav-mobile" style="color: black;">&#9776;</a>
-
-      <ul class="topnav right hide-on-med-and-down"></ul>
-      <ul class="sidenav" style="background-color: #393e46;" id="nav-mobile"></ul>
-    </div>
+    <div id="nav"></div>
   </nav>
   <!-- Akhir Navigasi -->
 
+  <!-- Konten -->
   <main>
-    
     <div class="body-content container">
       <center>
         <div class="loader"></div>
       </center>
     </div>
   </main>
+  <!-- Akhir Konten -->
   
   <!-- Footer -->
   <footer class="page-footer grey" style="bottom: 0px;">
-    <div class="container" style="padding: 0px 10px 10px 10px;">
-      <center>© 2020 Copyright | Built by Dandi Indra Wijaya</center>
-    </div>
+    <div id="footer"></div>
   </footer>
+  <!-- Akhir Footer -->
+
 
   <script src="js/materialize.min.js"></script>
   <script src="js/idb.js"></script>
   <script src="js/db.js"></script>
   <script src="js/api.js"></script>
   <script src="js/main.js"></script>
-  
+
   <script>
     //REGISTER SERVICE WORKER
     if ("serviceWorker" in navigator) {
@@ -72,7 +48,8 @@
         navigator.serviceWorker
           .register("/service-worker.js")
       });
-    }
+    } 
   </script>
+  
 </body>
 </html>
