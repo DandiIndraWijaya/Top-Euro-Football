@@ -24,11 +24,14 @@
 							var sidenav = document.querySelector('.sidenav');
 							M.Sidenav.getInstance(sidenav).close();
 							
-							// Muat konten halaman yang dipanggil 
+							// Kode di bawah dijalankan jika berada di index.html
 							let url = event.target.getAttribute('href').substr(1);
-							url = url.split("#")
-							const page = url[1]
-							loadPage(page);
+							url = url.split("#");
+							const page = url[1];
+
+							if(window.location.pathname == '/index.html'){
+								loadPage(page);
+							}
 						});
 					});
 				  });
@@ -70,10 +73,10 @@
 									const myFavClub = document.getElementById("my-favorite-clubs");
 
 									myFavClub.innerHTML =  `
+										<h6>My Favorite Clubs</h6>
 										${
 											clubs.length > 0? clubs.map(club => 
 												`
-												<h6>My Favorite Clubs</h6>
 												<div class="card" style="padding: 5px;">
 													<center>
 														<h4 style="text-decoration: underline;">${club.name}</h4>
@@ -98,11 +101,12 @@
 																</button>
 															</div>
 														
-													</center>`
+													</center>
+												</div>`
 											).join(" ")
 											: 
 											`<center>
-												<h4 style="margin-top: 20%">You're not a fan of any clubs</h4>
+												<h4 style="margin-top: 20%">I'm not a fan of any clubs</h4>
 											</center>`
 										}
 									</div>
