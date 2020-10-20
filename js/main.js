@@ -35,9 +35,6 @@
 		}
 
 
-
-
-
 		// LOAD KONTEN HALAMAN
 		const path = window.location.pathname;
 
@@ -64,8 +61,70 @@
 						getData(response.text());
 						async function getData(responseData){
 							let data = await responseData;
-							content.innerHTML = data;
+
+							if(page == "my_favorite_clubs"){
+								getAllSavedFavoriteClubs().then(clubs =>{
+									console.log(clubs);
+									content.innerHTML = data;
+
+									const myFavClub = document.getElementById("my-favorite-clubs");
+
+									myFavClub.innerHTML =  `
+										${
+											clubs.length > 0? clubs.map(club => 
+												`
+												<h6>My Favorite Clubs</h6>
+												<div class="card" style="padding: 5px;">
+													<center>
+														<h4 style="text-decoration: underline;">${club.name}</h4>
+														<img src="${club.crestUrl}" height="150" alt="favorite-club">
+														<br>
+															<div style="display: flex;  align-items: center;
+															justify-content: center;">
+																<a href="../club_information.html?id=${club.id}">
+																	<button class="btn btn-club-detail" style="margin-right: 5px;">Club Information</button>
+																</a>
+
+																<button
+																data-id="${club.id}" 
+																class="btn btn-remove-favorite-club" 
+																style="
+																	margin-left: 5px; 
+																	background-color: 
+																	rgb(219, 20, 20); 
+																	color: white"
+																>
+																	Remove
+																</button>
+															</div>
+														
+													</center>`
+											).join(" ")
+											: 
+											`<center>
+												<h4 style="margin-top: 20%">You're not a fan of any clubs</h4>
+											</center>`
+										}
+									</div>
+									`;
+									// Hapush dari Favorite Clubs
+									const btnRemoveFavorite = document.querySelectorAll('.btn-remove-favorite-club');
+									if(btnRemoveFavorite){
+										for(let i = 0 ; i < btnRemoveFavorite.length ; i++){
+											btnRemoveFavorite[i].addEventListener('click', function (event) {
+												let id = btnRemoveFavorite[i].dataset.id;
+												removeFromFavoriteClubs(parseInt(id));
+												loadPage(page);
+											})
+										}
+									}
+								})
+							}else{
+								content.innerHTML = data;
+							}
+							
 						}
+						
 					}
 					else if(response.status === 404){
 						content.innerHTML = "<p>Page not Found.</p>";

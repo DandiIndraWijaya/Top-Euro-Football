@@ -2,7 +2,6 @@ let CACHE_NAME = "top-euro-league-v1";
 let urlsToCache = [
   "/",
   "/nav.html",
-  "/index.js",
   "/match.html",
   "/club_information.html",
   "/standings.html",

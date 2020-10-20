@@ -141,7 +141,7 @@ const getClubMatch = () => {
                 <img src="${logo}" width="100" height="100" />
                 <br>
                 <a href="./club_information.html?id=${id}">
-                    <button id="btn-club-information">Club Information</button>
+                    <button class="btn btn-club-information">Club Information</button>
                 </a>
             </center>
             <h5>Match Schedules</h5>
@@ -223,12 +223,12 @@ const getClubInformation = () => {
                     ${check ? 
                         `<span style='color: #00adb5'>I'm a fan of this club</span>
                         <br>
-                        <button id="btn-remove-favorite">Not a fan anymore? ( click! )</button>` : 
-                        `<button id="btn-save-favorite">Add to My Favorite Clubs</button>`
+                        <button class="btn-remove-favorite">Not a fan anymore? ( click! )</button>` : 
+                        `<button class="btn btn-save-favorite">Add to My Favorite Clubs</button>`
                     }
                     <br>
                         <a href="./match.html?id=${id}&logo=${data.crestUrl}"> 
-                            <button id="btn-schedules">Match Schedules</button>
+                            <button class="btn btn-schedules">Match Schedules</button>
                         </a>
                     <br>
                     <br>
@@ -274,8 +274,8 @@ const getClubInformation = () => {
         `;
 
         
-        const btnFavorite = document.querySelector("#btn-save-favorite");
-        const btnRemoveFavorite = document.querySelector("#btn-remove-favorite");
+        const btnFavorite = document.querySelector(".btn-save-favorite");
+        const btnRemoveFavorite = document.querySelector(".btn-remove-favorite");
         //  Simpan ke Favorite Clubs
         if(btnFavorite){
             btnFavorite.addEventListener('click', () =>{
@@ -346,4 +346,6 @@ const getClubInformation = () => {
         }
     });
 }
+
+
 

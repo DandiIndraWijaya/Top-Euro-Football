@@ -28,16 +28,16 @@ const removeFromFavoriteClubs = (data) => {
     })
 }
 
-const getAll = () => {
+const getAllSavedFavoriteClubs = () => {
     return new Promise((resolve, reject) => {
         dbPromised
         .then(db => {
-            let tx = db.transaction("articles", "readonly");
-            let store = tx.objectStore("articles");
+            let tx = db.transaction("favorite-clubs", "readonly");
+            let store = tx.objectStore("favorite-clubs");
             return store.getAll();
         })
-        .then(articles => {
-            resolve(articles);
+        .then(data => {
+            resolve(data);
         })
     })
 }

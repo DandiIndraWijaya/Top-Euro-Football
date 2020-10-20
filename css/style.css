@@ -42,46 +42,36 @@
     margin-top: 40px;
 }
 
+
 .schedule{
     padding: 5px;
     background-color: #00adb5;
     color: white;
 }
 
-#btn-save-favorite{
-    border: unset;
-    outline: unset;
-    border-radius: 8px;
-    background-color: #00adb5;
-    color: white;
-    padding: 5px;
-}
 
-#btn-remove-favorite{
+.btn-remove-favorite{
     border: unset;
     outline: unset;
     background-color: inherit;
     font-size: 8pt;
     color: rgb(219, 20, 20);
-    padding: 5px;
 }
 
-#btn-remove-favorite:hover{
+.btn-remove-favorite:hover{
     text-decoration: underline;
+    cursor: pointer;
 }
 
-#btn-schedules, #btn-club-information{
-    border: unset;
-    outline: unset;
-    border-radius: 8px;
+.btn-schedules, .btn-club-information, .btn-save-favorite, .btn-club-detail, .btn-remove-favorite-club{
     background-color: #393e46;
     color: white;
-    padding: 5px;
     margin-top: 5px;
 }
 
-#btn-save-favorite:hover, #btn-schedules:hover, #btn-club-information:hover{
-    cursor: pointer;
+.btn-remove-favorite-club:hover{
+    background-color: rgb(190, 57, 57);
 }
+
 
 
