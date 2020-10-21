@@ -1,5 +1,6 @@
 {
     "name": "Top Eruo Football",
+    "gcm_sender_id": "862234896193",
     "short_name": "Top Eruo Football",
     "description": "Top Eruo Football",
     "start_url": "/index.html",

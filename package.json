@@ -1,0 +1,22 @@
+{
+  "name": "top-euro-league",
+  "version": "1.0.0",
+  "description": "",
+  "main": "push.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DandiIndraWijaya/Top-Euro-Football.git"
+  },
+  "author": "Dandi Indra Wijaya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DandiIndraWijaya/Top-Euro-Football/issues"
+  },
+  "homepage": "https://github.com/DandiIndraWijaya/Top-Euro-Football#readme",
+  "dependencies": {
+    "web-push": "^3.4.4"
+  }
+}

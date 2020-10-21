@@ -3,7 +3,7 @@
 		// Muat NavBar
 		document.getElementById("nav").innerHTML = `
 			<div class="nav-wrapper container">
-			<a href="#" class="brand-logo" id="logo-container" style="color: #eeee;">Top Euro</a>
+			<a href="#" class="brand-logo" id="logo-container" style=""><img height="60" src="./images/logo.png" /></a>
 			<a href="#" class="sidenav-trigger" data-target="nav-mobile" style="color: black;">&#9776;</a>
 	
 			<ul class="topnav right hide-on-med-and-down"></ul>
@@ -123,7 +123,7 @@
 											).join(" ")
 											: 
 											`<center>
-												<h4 style="margin-top: 20%">I'm not a fan of any clubs</h4>
+												<h4 style="margin-top: 20%">You're not a fan of any clubs</h4>
 											</center>`
 										}
 									</div>

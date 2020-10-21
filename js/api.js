@@ -221,7 +221,7 @@ const getClubInformation = () => {
                     <h5 style="text-decoration: underline">${data.name}</h5>
                     <h6>Since ${data.founded}</h6>
                     ${check ? 
-                        `<span style='color: #00adb5'>I'm a fan of this club</span>
+                        `<span style='color: #00adb5'>You're a fan of this club</span>
                         <br>
                         <button class="btn-remove-favorite">Not a fan anymore? ( click! )</button>` : 
                         `<button class="btn btn-save-favorite">Add to My Favorite Clubs</button>`
