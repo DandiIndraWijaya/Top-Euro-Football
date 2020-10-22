@@ -13,7 +13,7 @@ let urlsToCache = [
   "/images/bundesliga.svg",
   "/images/eredivisie.jpg",
   "/images/la_liga.png",
-  "/images/ligue_1.svg",
+  "/images/ligue_1.png",
   "/images/premiere_league_emblem.jpg",
   "/images/serie_a.jpg",
   "/js/materialize.min.js",

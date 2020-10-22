@@ -32,7 +32,7 @@ const getCompetitionStanding = () => {
       .then(status)
       .then(json)
       .then(data => {
-        data.status = "The data is up to date"
+        data.status = "(The data is up to date)"
         showData(data, idParam);
       })
       .catch(() => {
@@ -41,7 +41,7 @@ const getCompetitionStanding = () => {
             .then(response => {
                 if (response) {
                 response.json().then(function(data) {
-                    data.status = "The data isn't Updated because you're offline"
+                    data.status = "(The data isn't Updated because you're offline)"
                     showData(data, idParam);
                 });
                 }else{
@@ -60,14 +60,25 @@ const getCompetitionStanding = () => {
             const standings = data.standings[0].table;
             data.id = id;
 
+            // Mengambil emblem dari folder images
             let logo = '';
             if(id === '2021'){
                 logo = '../images/premiere_league_emblem.jpg';
+            }else if(id === '2014'){
+                logo = '../images/la_liga.png';
+            }else if(id === '2002'){
+                logo = '../images/bundesliga.svg';
+            }else if(id === '2019'){
+                logo = '../images/serie_a.jpg';
+            }else if(id === '2015'){
+                logo = '../images/ligue_1.png';
+            }else{
+                logo = '../images/eredivisie.jpg';
             }
             
             content.innerHTML = `
-                <center><img src="${logo}" widt="100" height="100" class="club-standing-logo" /></center>
-                <h5>Standing <span style="font-size: 10pt;">${data.status}</span> </h5> 
+                <center><img src="${logo}" style="margin-top: 10px;" widt="100" height="100" class="club-standing-logo" /></center>
+                <h5>Standings <span style="font-size: 10pt;">${data.status}</span> </h5> 
                 <table class="striped">
                 <thead>
                 <tr>
