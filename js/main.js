@@ -59,7 +59,7 @@
 		const path = window.location.pathname;
 
 		if(path === '/standings.html'){
-          	getCompetitionStanding()
+          	getCompetitionStandings()
 
 		}else if(path === '/match.html'){
 			getClubMatch()
@@ -84,13 +84,12 @@
 
 							if(page == "my_favorite_clubs"){
 								getAllSavedFavoriteClubs().then(clubs =>{
-									console.log(clubs);
 									content.innerHTML = data;
 
 									const myFavClub = document.getElementById("my-favorite-clubs");
 
 									myFavClub.innerHTML =  `
-										<h6>My Favorite Clubs</h6>
+										<h6 style="margin-top: 30px">My Favorite Clubs</h6>
 										${
 											clubs.length > 0? clubs.map(club => 
 												`
@@ -128,7 +127,8 @@
 										}
 									</div>
 									`;
-									// Hapush dari Favorite Clubs
+									
+									// Hapus klub dari obejctstore favorite-clubs
 									const btnRemoveFavorite = document.querySelectorAll('.btn-remove-favorite-club');
 									if(btnRemoveFavorite){
 										for(let i = 0 ; i < btnRemoveFavorite.length ; i++){

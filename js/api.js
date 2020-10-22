@@ -18,7 +18,7 @@ const json = response => {
     return response.json();
 }
 
-const getCompetitionStanding = () => {
+const getCompetitionStandings = () => {
     // Ambil nilai query parameter (?id=)
     var urlParams = new URLSearchParams(window.location.search);
     var idParam = urlParams.get("id");
