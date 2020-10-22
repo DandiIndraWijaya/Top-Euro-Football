@@ -73,7 +73,7 @@
     function requestPermission() {
         if ('Notification' in window) {
         
-        Notification.requestPermission().then(function (result) {
+        Notification.requestPermission().then(result => {
             if (result === "denied") {
                 console.log("Fitur notifikasi tidak diijinkan.");
                 return;
@@ -83,11 +83,11 @@
             }
             
             if (('PushManager' in window)) {
-                    navigator.serviceWorker.getRegistration().then(function(registration) {
+                    navigator.serviceWorker.getRegistration().then(registration => {
                         registration.pushManager.subscribe({
                             userVisibleOnly: true,
                             applicationServerKey: urlBase64ToUint8Array("BKrVcsmo943BpI-JrowNgIODorGw4JeEW-nsvCR94pDbFmD6xpQlGk3-zXXmDZBSNf4Hh-d3SXA59hiDAvomrtc")
-                        }).then(function(subscribe) {
+                        }).then(subscribe => {
                             console.log('Berhasil melakukan subscribe dengan endpoint: ', subscribe.endpoint);
                             console.log('Berhasil melakukan subscribe dengan p256dh key: ', btoa(String.fromCharCode.apply(
                                 null, new Uint8Array(subscribe.getKey('p256dh')))));

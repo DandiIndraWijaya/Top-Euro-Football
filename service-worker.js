@@ -57,15 +57,15 @@ self.addEventListener("fetch", function(event) {
 });
 
 self.addEventListener('push', function(event) {
-  var body;
+  let body;
   if (event.data) {
     body = event.data.text();
   } else {
     body = 'Push message no payload';
   }
-  var options = {
+  let options = {
     body: body,
-    icon: 'img/notification.png',
+    icon: 'images/logo.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),

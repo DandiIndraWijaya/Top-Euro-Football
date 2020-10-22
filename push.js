@@ -1,4 +1,4 @@
-var webPush = require('web-push');
+let webPush = require('web-push');
  
 const vapidKeys = {
    "publicKey": "BKrVcsmo943BpI-JrowNgIODorGw4JeEW-nsvCR94pDbFmD6xpQlGk3-zXXmDZBSNf4Hh-d3SXA59hiDAvomrtc",
@@ -11,16 +11,16 @@ webPush.setVapidDetails(
    vapidKeys.publicKey,
    vapidKeys.privateKey
 )
-var pushSubscription = {
-   "endpoint": "https://fcm.googleapis.com/fcm/send/fiWM34xD9Tw:APA91bExzNafTh5-wpBZPEyMIxSmopKJXGgl8R3jAPiod5UQ3c_bcaCg3hMJLyEVPMiCkjmBaon1E4UTSfeYYINfy1L67Uoa8jnMTbnGsLDPFsxSQzLd8qUSDIDWoNJydJaOxikQrXY4",
+let pushSubscription = {
+   "endpoint": "https://fcm.googleapis.com/fcm/send/caxTEvf-IA0:APA91bH0DZFLIzwebiofzduSHj6ltvSeimockgRJCQfYtGD50koyEVaEvnGByccXAuDEfVznMc9eZNla3bjDD3i6JMCeROSASdSa1Cbx3u3p57HrGacHUQHLm-GOsFZVor5-J5c5ijDA",
    "keys": {
-       "p256dh": "BA+XgDPMTw6AiM8cuq39/MByIBlz39S+4frZFYwut8uq54QMTB8xE+9OMubC8qVlCg8eHPSIjX89uLxDy4FHZTU=",
-       "auth": "avQF7jyB6CHEcP/kts5gkw=="
+       "p256dh": "BA/AXp25XaK2teBvLqgCO/jSd/AdDG6EodHREkMA40fWJ7tQYg1MxsZy+xnBNH3YWOQOtmhkaSdG+Z6UsBPwb/U=",
+       "auth": "0Rh+iBf3/idpJMcoTuCkjA=="
    }
 };
-var payload = 'Great';
-const title = 'Notifikasi Sederhana';
-var options = {
+let payload = 'Notification';
+const title = 'Top Euro League';
+let options = {
    gcmAPIKey: '862234896193',
    TTL: 60,
 };

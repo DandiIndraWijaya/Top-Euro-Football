@@ -4,33 +4,59 @@ const content = document.querySelector(".body-content");
 // Blok kode yang akan di panggil jika fetch berhasil
 const status = response => {
     if (response.status !== 200) {
-      console.log("Error : " + response.status);
-      // Method reject() akan membuat blok catch terpanggil
-      return Promise.reject(new Error(response.statusText));
+        console.log("Error : " + response.status);
+        // Method reject() akan membuat blok catch terpanggil
+        return Promise.reject(new Error(response.statusText));
     } else {
-      // Mengubah suatu objek menjadi Promise agar bisa "di-then-kan"
-      return Promise.resolve(response);
+        // Mengubah suatu objek menjadi Promise agar bisa "di-then-kan"
+        return Promise.resolve(response);
     }
-  }
-  
-  // Blok kode untuk memparsing json menjadi array JavaScript
-  const json = response => {
+}
+    
+// Blok kode untuk memparsing json menjadi array JavaScript
+const json = response => {
     return response.json();
-  }
-  
-  // Blok kode untuk meng-handle kesalahan di blok catch
-  const error = () => {
-    // Parameter error berasal dari Promise.reject()
-    console.log("Error : " + error);
-  }
+}
 
 const getCompetitionStanding = () => {
     // Ambil nilai query parameter (?id=)
     var urlParams = new URLSearchParams(window.location.search);
     var idParam = urlParams.get("id");
+
+    // Mengambil data klasemen ke server
+    fetch(`${base_url}competitions/${idParam}/standings`, {
+        headers: {
+            "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
+        }
+    })
+      .then(status)
+      .then(json)
+      .then(data => {
+        data.status = "The data is up to date"
+        showData(data, idParam);
+      })
+      .catch(() => {
+        // Jika tidak ada koneksi internet, tampilkan data klasemen di dalam cache
+        caches.match(`${base_url}competitions/${idParam}/standings`)
+            .then(response => {
+                if (response) {
+                response.json().then(function(data) {
+                    data.status = "The data isn't Updated because you're offline"
+                    showData(data, idParam);
+                });
+                }else{
+                    // Jika dalam cache tidak terdapat data maka tampilkan kode di bawah
+                    content.innerHTML = `
+                    <center>
+                        <h3 style="margin-top: 20%">No Data & You're Offline</h3>
+                        <h5>Connect your device to internet to receive data</h5>
+                    </center>`
+                }
+            });
+      })
     
+    // Kode untuk menampilkan sata kompetisi yang didapat dari server atau cache
     let showData = (data, id) => {
-        
             const standings = data.standings[0].table;
             data.id = id;
 
@@ -42,88 +68,50 @@ const getCompetitionStanding = () => {
             content.innerHTML = `
                 <center><img src="${logo}" widt="100" height="100" class="club-standing-logo" /></center>
                 <h5>Standing <span style="font-size: 10pt;">${data.status}</span> </h5> 
-            <table class="striped">
-            <thead>
-            <tr>
-                <th></th>
-                <th></th>
-                <th>Klub</th>
-                <th>M</th>
-                <th>M</th>
-                <th>S</th>
-                <th>K</th>
-                <th>GM</th>
-                <th>GA</th>
-                <th>SG</th>
-                <th>Poin</th>
-            </tr>
-            </thead>
+                <table class="striped">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Klub</th>
+                    <th>M</th>
+                    <th>M</th>
+                    <th>S</th>
+                    <th>K</th>
+                    <th>GM</th>
+                    <th>GA</th>
+                    <th>SG</th>
+                    <th>Poin</th>
+                </tr>
+                </thead>
 
-            <tbody>
-                ${
-                    standings.map(club => `
-                            <tr>
-                                <td>${club.position}</td>
-                                <td><img src="${club.team.crestUrl}"  height="15"  /></td>
-                                <td> 
-                                    <a href="./club_information.html?id=${club.team.id}" >
-                                        <span class="club-name-table">${club.team.name}</span>
-                                    </a>
-                                </td>
-                                <td>${club.playedGames}</td>
-                                <td>${club.won}</td>
-                                <td>${club.draw}</td>
-                                <td>${club.lost}</td>
-                                <td>${club.goalsFor}</td>
-                                <td>${club.goalsAgainst}</td>
-                                <td>${club.goalDifference}</td>
-                                <td>${club.points}</td>
-                            </tr>
-                        `
-                    ).join(" ")
-                }
-            </tbody>
-        </table>
-            `
+                <tbody>
+                    ${
+                        standings.map(club => `
+                                <tr>
+                                    <td>${club.position}</td>
+                                    <td><img src="${club.team.crestUrl}"  height="15"  /></td>
+                                    <td> 
+                                        <a href="./club_information.html?id=${club.team.id}" >
+                                            <span class="club-name-table">${club.team.name}</span>
+                                        </a>
+                                    </td>
+                                    <td>${club.playedGames}</td>
+                                    <td>${club.won}</td>
+                                    <td>${club.draw}</td>
+                                    <td>${club.lost}</td>
+                                    <td>${club.goalsFor}</td>
+                                    <td>${club.goalsAgainst}</td>
+                                    <td>${club.goalDifference}</td>
+                                    <td>${club.points}</td>
+                                </tr>
+                            `
+                        ).join(" ")
+                    }
+                </tbody>
+            </table>
+                `
     }
-    return new Promise(function(resolve, reject) {
-
-        if(navigator.onLine){
-            fetch(`${base_url}competitions/${idParam}/standings`, {
-                headers: {
-                    "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
-                }
-            })
-              .then(status)
-              .then(json)
-              .then(function(data) {
-                data.status = "The data is up to date"
-                showData(data, idParam);
-                // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-                resolve(data);
-              });
-        }
-        else {
-          caches.match(`${base_url}competitions/${idParam}/standings`)
-          .then(response => {
-            if (response) {
-              response.json().then(function(data) {
-                data.status = "The data isn't Updated because you're offline"
-                showData(data, idParam)
-                // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-                resolve(data);
-              });
-            }else{
-                content.innerHTML = `
-                <center>
-                    <h3 style="margin-top: 20%">No Data & You're Offline</h3>
-                    <h5>Connect your device to internet to receive data</h5>
-                </center>`
-            }
-          });
-        }
-       
-    });
 }
 
 const getClubMatch = () => {
@@ -132,6 +120,38 @@ const getClubMatch = () => {
     let idParam = urlParams.get("id");
     let logoParam = urlParams.get("logo");
 
+    // Mengambil data jadwal pertandingan suatu klub ke server
+    fetch(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`, {
+        headers: {
+            "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
+        }
+    })
+    .then(status)
+    .then(json)
+    .then(function(data) {
+        showData(data, logoParam ,idParam)
+    })
+    .catch(() => {
+        // Jika tidak terdapat koneksi internet, ambil data jadwal ke cache
+        caches.match(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`)
+        .then(response => {
+            if (response) {
+                response.json().then(function(data) {
+                    showData(data, logoParam ,idParam);
+                });
+            }else{
+                // Jika belum ada pada cache tampilkan kode di bawah
+                content.innerHTML = `
+                <center>
+                    <h3 style="margin-top: 20%">No Data & You're Offline</h3>
+                    <h5>Connect your device to internet to receive data</h5>
+                </center>`
+            }
+        });
+    })
+    
+
+    //Kode untuk menampilkan data jadwal pertandingan suatu klub
     let showData = (data, logo, id) =>{
         
         const schedules = data.matches;
@@ -170,48 +190,61 @@ const getClubMatch = () => {
                 ).join(" ")
             }`;
     }
-    console.log('dd')
-    return new Promise(function(resolve, reject) {
-
-        if(navigator.onLine){
-            fetch(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`, {
-                headers: {
-                    "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
-                }
-            })
-            .then(status)
-            .then(json)
-            .then(function(data) {
-                showData(data, logoParam ,idParam)
-                // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-                resolve(data);
-            });
-        }else{
-            caches.match(`https://api.football-data.org/v2/teams/${idParam}/matches?status=SCHEDULED`)
-            .then(response => {
-                if (response) {
-                    response.json().then(function(data) {
-                        showData(data, logoParam ,idParam)
-                        // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-                        resolve(data);
-                    });
-                }else{
-                    content.innerHTML = `
-                    <center>
-                        <h3 style="margin-top: 20%">No Data & You're Offline</h3>
-                        <h5>Connect your device to internet to receive data</h5>
-                    </center>`
-                }
-            });
-        }
-    });
-}
+}       
 
 const getClubInformation = () => {
     // Ambil nilai query parameter (?id=)
     let urlParams = new URLSearchParams(window.location.search);
     let idParam = urlParams.get("id");
 
+    // Ambil data informasi suatu klub ke server
+    fetch(`${base_url}teams/${idParam}`, {
+        headers: {
+            "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
+        }
+    })
+      .then(status)
+      .then(json)
+      .then(function(data) {
+        // Cek indexedDB apakah klub ada dalam objek store favorite-clubs
+        checkFavoriteClub(parseInt(idParam)).then(club => {
+            if(club){
+                // Jika iya
+                showData(data, idParam, true)
+            }else{
+                // Jika tidak
+                showData(data, idParam, false)
+            }
+        });
+    })
+    .catch(() => {
+        // Ambil data dari caches jika tidak ada konesi internet
+        caches.match(`${base_url}teams/${idParam}`).then(function(response) {
+            if (response) {
+              response.json().then(function(data) {
+                 // Cek indexedDB apakah klub ada dalam objek store favorite-clubs
+                checkFavoriteClub(parseInt(idParam)).then(club => {
+                    if(club){
+                        // Jika iya 
+                        showData(data, idParam, true)
+                    }else{
+                        // Jika tidak
+                        showData(data, idParam, false)
+                    }
+                });
+              });
+            }else{
+                // Tampilkan kode di bawah jika tidak ditemukan data informasi suatu klub dalam cache
+                content.innerHTML = `
+                <center>
+                    <h3 style="margin-top: 20%">No Data & You're Offline</h3>
+                    <h5>Connect your device to internet to receive data</h5>
+                </center>`
+            }
+        });
+    })
+
+    // Kode untuk menampilkan data informasi suatu klub
     let showData = (data, id, check) => {
         content.innerHTML = `
             <br>
@@ -276,7 +309,7 @@ const getClubInformation = () => {
         
         const btnFavorite = document.querySelector(".btn-save-favorite");
         const btnRemoveFavorite = document.querySelector(".btn-remove-favorite");
-        //  Simpan ke Favorite Clubs
+        //  Simpan klub ke object store favorite-clubs
         if(btnFavorite){
             btnFavorite.addEventListener('click', () =>{
                 showData(data, id, true);
@@ -284,7 +317,7 @@ const getClubInformation = () => {
             });
         }
 
-        // Hapush dari Favorite Clubs
+        // Hapus klub dari object store favorite-clubs
         if(btnRemoveFavorite){
             btnRemoveFavorite.addEventListener('click', () => {
                 showData(data, id, false);
@@ -293,58 +326,6 @@ const getClubInformation = () => {
         }
 
     }
-    return new Promise(function(resolve, reject) {
-        
-        if(navigator.onLine){
-            fetch(`${base_url}teams/${idParam}`, {
-                headers: {
-                    "X-Auth-Token" : "d6a0462a40b74b29b622919e71c7b069"
-                }
-            })
-              .then(status)
-              .then(json)
-              .then(function(data) {
-
-                // Cek apakah club/tim adalah club favorit
-                checkFavoriteClub(parseInt(idParam)).then(club => {
-                    if(club){
-                        // Jika iya
-                        showData(data, idParam, true)
-                    }else{
-                        // Jika tidak
-                        showData(data, idParam, false)
-                    }
-                });
-                // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-                resolve(data);
-            });
-        }else{
-            caches.match(`${base_url}teams/${idParam}`).then(function(response) {
-                if (response) {
-                  response.json().then(function(data) {
-                      // Cek apakah club/tim adalah club favorit
-                    checkFavoriteClub(parseInt(idParam)).then(club => {
-                        if(club){
-                            // Jika iya 
-                            showData(data, idParam, true)
-                        }else{
-                            // Jika tidak
-                            showData(data, idParam, false)
-                        }
-                    });
-                    // Kirim objek data hasil parsing json agar bisa disimpan ke indexed db
-                    resolve(data);
-                  });
-                }else{
-                    content.innerHTML = `
-                    <center>
-                        <h3 style="margin-top: 20%">No Data & You're Offline</h3>
-                        <h5>Connect your device to internet to receive data</h5>
-                    </center>`
-                }
-              });
-        }
-    });
 }
 
 
