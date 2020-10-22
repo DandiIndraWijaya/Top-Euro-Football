@@ -18,7 +18,6 @@ const json = response => {
     return response.json();
 }
 
-
 // Blok kode untuk kembali ke halaman sebelumnya
 function goBack() {
     window.history.back();
@@ -349,5 +348,62 @@ const getClubInformation = () => {
     }
 }
 
+const getFavoriteClubsFromIndexedDB = (data) => {
+    getAllSavedFavoriteClubs().then(clubs =>{
+        content.innerHTML = data;
 
+        const myFavClub = document.getElementById("my-favorite-clubs");
 
+        myFavClub.innerHTML =  `
+            <h6 style="margin-top: 30px">My Favorite Clubs</h6>
+            ${
+                clubs.length > 0? clubs.map(club => 
+                    `
+                    <div class="card" style="padding: 5px;">
+                        <center>
+                            <h4 style="text-decoration: underline;">${club.name}</h4>
+                            <img src="${club.crestUrl}" height="150" alt="favorite club emblem">
+                            <br>
+                                <div style="display: flex;  align-items: center;
+                                justify-content: center;">
+                                    <a href="../club_information.html?id=${club.id}">
+                                        <button class="btn btn-club-detail" style="margin-right: 5px;">Club Information</button>
+                                    </a>
+
+                                    <button
+                                    data-id="${club.id}" 
+                                    class="btn btn-remove-favorite-club" 
+                                    style="
+                                        margin-left: 5px; 
+                                        background-color: 
+                                        rgb(219, 20, 20); 
+                                        color: white"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            
+                        </center>
+                    </div>`
+                ).join(" ")
+                : 
+                `<center>
+                    <h4 style="margin-top: 20%">You're not a fan of any clubs</h4>
+                </center>`
+            }
+        </div>
+        `;
+        
+        // Hapus klub dari obejctstore favorite-clubs
+        const btnRemoveFavorite = document.querySelectorAll('.btn-remove-favorite-club');
+        if(btnRemoveFavorite){
+            for(let i = 0 ; i < btnRemoveFavorite.length ; i++){
+                btnRemoveFavorite[i].addEventListener('click', function (event) {
+                    let id = btnRemoveFavorite[i].dataset.id;
+                    removeFromFavoriteClubs(parseInt(id));
+                    loadPage(page);
+                })
+            }
+        }
+    })
+}
