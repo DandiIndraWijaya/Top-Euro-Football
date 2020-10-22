@@ -18,6 +18,12 @@ const json = response => {
     return response.json();
 }
 
+
+// Blok kode untuk kembali ke halaman sebelumnya
+function goBack() {
+    window.history.back();
+}
+
 const getCompetitionStandings = () => {
     // Ambil nilai query parameter (?id=)
     var urlParams = new URLSearchParams(window.location.search);
@@ -47,6 +53,8 @@ const getCompetitionStandings = () => {
                 }else{
                     // Jika dalam cache tidak terdapat data maka tampilkan kode di bawah
                     content.innerHTML = `
+                    <br/>
+                    <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
                     <center>
                         <h3 style="margin-top: 20%">No Data & You're Offline</h3>
                         <h5>Connect your device to internet to receive data</h5>
@@ -61,23 +69,25 @@ const getCompetitionStandings = () => {
             data.id = id;
 
             // Mengambil emblem dari folder images
-            let logo = '';
+            let emblem = '';
             if(id === '2021'){
-                logo = '../images/premiere_league_emblem.jpg';
+                emblem = '../images/premiere_league_emblem.jpg';
             }else if(id === '2014'){
-                logo = '../images/la_liga.png';
+                emblem = '../images/la_liga.png';
             }else if(id === '2002'){
-                logo = '../images/bundesliga.svg';
+                emblem = '../images/bundesliga.svg';
             }else if(id === '2019'){
-                logo = '../images/serie_a.jpg';
+                emblem = '../images/serie_a.jpg';
             }else if(id === '2015'){
-                logo = '../images/ligue_1.png';
+                emblem = '../images/ligue_1.png';
             }else{
-                logo = '../images/eredivisie.jpg';
+                emblem = '../images/eredivisie.jpg';
             }
             
             content.innerHTML = `
-                <center><img src="${logo}" style="margin-top: 10px;" widt="100" height="100" class="club-standing-logo" /></center>
+                <br/>
+                <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
+                <center><img src="${emblem}" widt="100" height="100" class="club-standing-logo" alt="league emblem" /></center>
                 <h5>Standings <span style="font-size: 10pt;">${data.status}</span> </h5> 
                 <table class="striped">
                 <thead>
@@ -101,7 +111,7 @@ const getCompetitionStandings = () => {
                         standings.map(club => `
                                 <tr>
                                     <td>${club.position}</td>
-                                    <td><img src="${club.team.crestUrl}"  height="15"  /></td>
+                                    <td><img src="${club.team.crestUrl.replace(/^http:\/\//i, 'https://')}"  height="15" alt="club emblem" /></td>
                                     <td> 
                                         <a href="./club_information.html?id=${club.team.id}" >
                                             <span class="club-name-table">${club.team.name}</span>
@@ -153,6 +163,8 @@ const getClubMatch = () => {
             }else{
                 // Jika belum ada pada cache tampilkan kode di bawah
                 content.innerHTML = `
+                <br/>
+                <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
                 <center>
                     <h3 style="margin-top: 20%">No Data & You're Offline</h3>
                     <h5>Connect your device to internet to receive data</h5>
@@ -161,26 +173,21 @@ const getClubMatch = () => {
         });
     })
     
-
     //Kode untuk menampilkan data jadwal pertandingan suatu klub
-    let showData = (data, logo, id) =>{
-        
+    let showData = (data, emblem) =>{
+       
         const schedules = data.matches;
         content.innerHTML = `
             <br>
+            <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
             <center>
-                <img src="${logo}" width="100" height="100" />
-                <br>
-                <a href="./club_information.html?id=${id}">
-                    <button class="btn btn-club-information">Club Information</button>
-                </a>
+                <img src="${emblem}" width="100" height="100" alt="club emblem" />
             </center>
             <h5>Match Schedules</h5>
             ${
                 schedules.map(schedule => {
                     let date = new Date(schedule.utcDate)
                     return `
-                        
                         <div class="card schedule">
                             <div class="row">
                                 <div class="col s12">
@@ -201,6 +208,7 @@ const getClubMatch = () => {
                 ).join(" ")
             }`;
     }
+    
 }       
 
 const getClubInformation = () => {
@@ -247,6 +255,8 @@ const getClubInformation = () => {
             }else{
                 // Tampilkan kode di bawah jika tidak ditemukan data informasi suatu klub dalam cache
                 content.innerHTML = `
+                <br/>
+                <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
                 <center>
                     <h3 style="margin-top: 20%">No Data & You're Offline</h3>
                     <h5>Connect your device to internet to receive data</h5>
@@ -259,8 +269,8 @@ const getClubInformation = () => {
     let showData = (data, id, check) => {
         content.innerHTML = `
             <br>
+            <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
             <div class="card" style="padding: 5px;">
-                
                 <center>
                     <h5 style="text-decoration: underline">${data.name}</h5>
                     <h6>Since ${data.founded}</h6>
@@ -276,7 +286,7 @@ const getClubInformation = () => {
                         </a>
                     <br>
                     <br>
-                    <img src="${data.crestUrl}"  height="200" >
+                    <img src="${data.crestUrl}"  height="200" alt="club emblem" >
                     <h6>${data.area.name}</h6>
                     <h6>${data.address}</h6>
                     <h6><a href="${data.website}">${data.website}</a></h6>

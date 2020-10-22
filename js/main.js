@@ -18,7 +18,7 @@
 			</div>
 		`
 
-		// SIDEBAR NAVIGATION
+		// Muat Sidebar Navigation
 		let elems = document.querySelectorAll('.sidenav');
 		M.Sidenav.init(elems);
 		loadNav();
@@ -41,7 +41,7 @@
 							var sidenav = document.querySelector('.sidenav');
 							M.Sidenav.getInstance(sidenav).close();
 							
-							// Kode di bawah dijalankan jika berada di index.html
+							// Kode di bawah dijalankan jika path berada di index.html
 							let url = event.target.getAttribute('href').substr(1);
 							url = url.split("#");
 							const page = url[1];
@@ -55,12 +55,11 @@
 		}
 
 
-		// LOAD KONTEN HALAMAN
+		// Muat konten halaman
 		const path = window.location.pathname;
 
 		if(path === '/standings.html'){
           	getCompetitionStandings()
-
 		}else if(path === '/match.html'){
 			getClubMatch()
 		}else if(path === '/club_information.html'){
@@ -82,6 +81,7 @@
 						async function getData(responseData){
 							let data = await responseData;
 
+							//Jika page adalah my_favorite_clubs jalankan blok kode dibawah untuk mendapatkan data dari object store favorite-clubs dalam indexedDB 
 							if(page == "my_favorite_clubs"){
 								getAllSavedFavoriteClubs().then(clubs =>{
 									content.innerHTML = data;
@@ -96,7 +96,7 @@
 												<div class="card" style="padding: 5px;">
 													<center>
 														<h4 style="text-decoration: underline;">${club.name}</h4>
-														<img src="${club.crestUrl}" height="150" alt="favorite-club">
+														<img src="${club.crestUrl}" height="150" alt="favorite club emblem">
 														<br>
 															<div style="display: flex;  align-items: center;
 															justify-content: center;">

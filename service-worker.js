@@ -18,6 +18,12 @@ let urlsToCache = [
   "/images/serie_a.jpg",
   "/js/materialize.min.js",
   "/manifest.json",
+  "icons/icon-128x128.png",
+  "icons/icon-144x144.png",
+  "icons/icon-192x192.png",
+  "icons/icon-256x256.png",
+  "icons/icon-384x384.png",
+  "icons/icon-512x512.png",
   "/js/db.js",
   "/js/idb.js",
   "/js/main.js",
@@ -33,7 +39,6 @@ self.addEventListener("install", function(event) {
 });
 
 
-
 self.addEventListener("fetch", function(event) {
   let base_url = "https://api.football-data.org/v2/";
 
@@ -42,7 +47,6 @@ self.addEventListener("fetch", function(event) {
       caches.open(CACHE_NAME).then(function(cache) {
         return fetch(event.request).then(function(response) {
           cache.put(event.request.url, response.clone());
-          console.log('gsgs')
           return response;
         })
       })
