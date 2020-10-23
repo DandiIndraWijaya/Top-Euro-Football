@@ -18,6 +18,7 @@ let urlsToCache = [
   "/images/serie_a.jpg",
   "/js/materialize.min.js",
   "/manifest.json",
+  "icons/iphone/apple-launch-1125x2436.png",
   "icons/icon-128x128.png",
   "icons/icon-144x144.png",
   "icons/icon-192x192.png",

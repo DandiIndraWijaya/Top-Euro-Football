@@ -19,7 +19,7 @@ const json = response => {
 }
 
 // Blok kode untuk kembali ke halaman sebelumnya
-function goBack() {
+const goBack = () => {
     window.history.back();
 }
 
@@ -93,15 +93,15 @@ const getCompetitionStandings = () => {
                 <tr>
                     <th></th>
                     <th></th>
-                    <th>Klub</th>
-                    <th>M</th>
-                    <th>M</th>
-                    <th>S</th>
-                    <th>K</th>
-                    <th>GM</th>
+                    <th>Club</th>
+                    <th>P</th>
+                    <th>W</th>
+                    <th>D</th>
+                    <th>L</th>
+                    <th>GF</th>
                     <th>GA</th>
-                    <th>SG</th>
-                    <th>Poin</th>
+                    <th>GD</th>
+                    <th>Point</th>
                 </tr>
                 </thead>
 
@@ -110,7 +110,7 @@ const getCompetitionStandings = () => {
                         standings.map(club => `
                                 <tr>
                                     <td>${club.position}</td>
-                                    <td><img src="${club.team.crestUrl.replace(/^http:\/\//i, 'https://')}"  height="15" alt="club emblem" /></td>
+                                    <td><img src="${club.team.crestUrl.replace(/^http:\/\//i, 'https://')}"  height="25" alt="club emblem" /></td>
                                     <td> 
                                         <a href="./club_information.html?id=${club.team.id}" >
                                             <span class="club-name-table">${club.team.name}</span>
@@ -182,7 +182,7 @@ const getClubMatch = () => {
             <center>
                 <img src="${emblem}" width="100" height="100" alt="club emblem" />
             </center>
-            <h5>Match Schedules</h5>
+            <h5>Matches</h5>
             ${
                 schedules.map(schedule => {
                     let date = new Date(schedule.utcDate)
@@ -280,8 +280,8 @@ const getClubInformation = () => {
                         `<button class="btn btn-save-favorite">Add to My Favorite Clubs</button>`
                     }
                     <br>
-                        <a href="./match.html?id=${id}&logo=${data.crestUrl}"> 
-                            <button class="btn btn-schedules">Match Schedules</button>
+                        <a href="./match.html?id=${id}&logo=${data.crestUrl.replace(/^http:\/\//i, 'https://')}"> 
+                            <button class="btn btn-schedules">Matches</button>
                         </a>
                     <br>
                     <br>
