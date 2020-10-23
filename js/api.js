@@ -348,7 +348,7 @@ const getClubInformation = () => {
     }
 }
 
-const getFavoriteClubsFromIndexedDB = (data) => {
+const getFavoriteClubsFromIndexedDB = (data, loadPage, page) => {
     getAllSavedFavoriteClubs().then(clubs =>{
         content.innerHTML = data;
 
@@ -401,7 +401,7 @@ const getFavoriteClubsFromIndexedDB = (data) => {
                 btnRemoveFavorite[i].addEventListener('click', function (event) {
                     let id = btnRemoveFavorite[i].dataset.id;
                     removeFromFavoriteClubs(parseInt(id));
-                    loadPage(page);
+                    loadPage(page)
                 })
             }
         }

@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 						//Jika page adalah my_favorite_clubs jalankan blok kode dibawah untuk mendapatkan data dari object store favorite-clubs dalam indexedDB 
 						if(page == "my_favorite_clubs"){
-							getFavoriteClubsFromIndexedDB(data);
+							getFavoriteClubsFromIndexedDB(data, loadPage, page);
 						}else{
 							content.innerHTML = data;
 						}
