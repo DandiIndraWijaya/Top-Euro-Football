@@ -78,7 +78,7 @@ self.addEventListener('push', function(event) {
     }
   };
   event.waitUntil(
-    self.registration.showNotification('Push Notification', options)
+    self.registration.showNotification('Top Euro League', options)
   );
 });
 
