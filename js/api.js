@@ -52,8 +52,7 @@ const getCompetitionStandings = () => {
                 }else{
                     // Jika dalam cache tidak terdapat data maka tampilkan kode di bawah
                     content.innerHTML = `
-                    <br/>
-                    <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
+                    <a class="back-arrow" onclick="goBack()"><h3 style="margin: 0px;">&larr;</h3></a>
                     <center>
                         <h3 style="margin-top: 20%">No Data & You're Offline</h3>
                         <h5>Connect your device to internet to receive data</h5>
@@ -84,9 +83,8 @@ const getCompetitionStandings = () => {
             }
             
             content.innerHTML = `
-                <br/>
-                <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
-                <center><img src="${emblem}" widt="100" height="100" class="club-standing-logo" alt="league emblem" /></center>
+                <a class="back-arrow" onclick="goBack()"><h3 style="margin: 0px;">&larr;</h3></a>
+                <center><img src="${emblem}" widt="100" height="100" class="club-standing-emblem" alt="league emblem" /></center>
                 <h5>Standings <span style="font-size: 10pt;">${data.status}</span> </h5> 
                 <table class="striped">
                 <thead>
@@ -162,8 +160,7 @@ const getClubMatch = () => {
             }else{
                 // Jika belum ada pada cache tampilkan kode di bawah
                 content.innerHTML = `
-                <br/>
-                <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
+                <a class="back-arrow" onclick="goBack()"><h3 style="margin: 0px;">&larr;</h3></a>
                 <center>
                     <h3 style="margin-top: 20%">No Data & You're Offline</h3>
                     <h5>Connect your device to internet to receive data</h5>
@@ -177,8 +174,7 @@ const getClubMatch = () => {
        
         const schedules = data.matches;
         content.innerHTML = `
-            <br>
-            <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
+            <a class="back-arrow" onclick="goBack()"><h3 style="margin: 0px;">&larr;</h3></a>
             <center>
                 <img src="${emblem}" width="100" height="100" alt="club emblem" />
             </center>
@@ -254,8 +250,7 @@ const getClubInformation = () => {
             }else{
                 // Tampilkan kode di bawah jika tidak ditemukan data informasi suatu klub dalam cache
                 content.innerHTML = `
-                <br/>
-                <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
+                <a class="back-arrow" onclick="goBack()"><h3 style="margin: 0px;">&larr;</h3></a>
                 <center>
                     <h3 style="margin-top: 20%">No Data & You're Offline</h3>
                     <h5>Connect your device to internet to receive data</h5>
@@ -267,8 +262,7 @@ const getClubInformation = () => {
     // Kode untuk menampilkan data informasi suatu klub
     let showData = (data, id, check) => {
         content.innerHTML = `
-            <br>
-            <a class="back-arrow" onclick="goBack()"><i class="material-icons">arrow_back</i></a>
+            <a class="back-arrow" onclick="goBack()"><h3 style="margin: 0px;">&larr;</h3></a>
             <div class="card" style="padding: 5px;">
                 <center>
                     <h5 style="text-decoration: underline">${data.name}</h5>
