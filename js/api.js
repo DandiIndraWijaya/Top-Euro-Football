@@ -86,7 +86,7 @@ const getCompetitionStandings = () => {
                 <a class="back-arrow" onclick="goBack()"><h3 style="margin: 0px;">&larr;</h3></a>
                 <center><img src="${emblem}" widt="100" height="100" class="club-standing-emblem" alt="league emblem" /></center>
                 <h5>Standings <span style="font-size: 10pt;">${data.status}</span> </h5> 
-                <table class="striped">
+                <table class="striped table-responsive">
                 <thead>
                 <tr>
                     <th></th>

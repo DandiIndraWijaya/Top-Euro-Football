@@ -1,4 +1,4 @@
-let CACHE_NAME = "top-euro-league-v1";
+let CACHE_NAME = "top-euro-league-v35";
 let urlsToCache = [
   "/",
   "/nav.html",
@@ -7,6 +7,8 @@ let urlsToCache = [
   "/standings.html",
   "/index.html",
   "/pages/home.html",
+  "/pages/about.html",
+  "/pages/my_favorite_clubs.html",
   "/css/materialize.min.css",
   "/css/style.css",
   "/images/logo.png",
